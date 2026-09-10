@@ -1,12 +1,6 @@
 name: CI
 on:
-  push:
-    branches:
-      - develop
-      - master
-      - "release/*"
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch: 
 jobs:
   determine_docker_org_and_tag:
     runs-on: ubuntu-latest
@@ -64,9 +58,9 @@ jobs:
         source "$ROS_2_ENV"
         sed -i '/colcon test/ s/$/ --parallel-workers 4 --packages-above $PACKAGES/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
-    - name: Run SonarScanner
-      uses: usdot-fhwa-stol/actions/sonar-scanner@main
-      with:
-        sonar-token: ${{ secrets.SONAR_TOKEN }}
-        working-dir: "/opt/carma/src/${{ github.event.repository.name }}"
+    # - name: Run SonarScanner
+    #   uses: usdot-fhwa-stol/actions/sonar-scanner@main
+    #   with:
+    #     sonar-token: ${{ secrets.SONAR_TOKEN }}
+    #     working-dir: "/opt/carma/src/${{ github.event.repository.name }}"
 
